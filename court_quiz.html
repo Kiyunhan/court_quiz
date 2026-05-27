@@ -1,0 +1,1674 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>서울중앙지방법원 우편물 분류 교육</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=Noto+Serif+KR:wght@400;700&display=swap');
+
+  :root {
+    --bg: #f5f3ee;
+    --surface: #ffffff;
+    --surface2: #f0ede6;
+    --border: #d4c9b0;
+    --accent: #1a3a5c;
+    --accent2: #c8973a;
+    --accent3: #8b2a2a;
+    --text: #1a1a1a;
+    --text2: #5a5240;
+    --text3: #9a8f7a;
+    --correct: #2d6e4e;
+    --wrong: #8b2a2a;
+    --correct-bg: #e8f4ee;
+    --wrong-bg: #f4e8e8;
+    --shadow: 0 2px 16px rgba(26,58,92,0.10);
+    --radius: 10px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Noto Sans KR', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  /* ── 헤더 ── */
+  header {
+    width: 100%;
+    background: var(--accent);
+    color: #fff;
+    padding: 18px 32px;
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.18);
+  }
+  .header-emblem {
+    width: 44px; height: 44px;
+    border: 2px solid var(--accent2);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Noto Serif KR', serif;
+    font-size: 18px; font-weight: 700; color: var(--accent2);
+    flex-shrink: 0;
+  }
+  .header-title { font-size: 17px; font-weight: 700; letter-spacing: -0.3px; }
+  .header-sub { font-size: 12px; opacity: 0.7; margin-top: 2px; }
+
+  /* ── 공통 컨테이너 ── */
+  .container {
+    width: 100%; max-width: 760px;
+    padding: 32px 20px 60px;
+    flex: 1;
+  }
+
+  /* ── 카드 ── */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 32px;
+    margin-bottom: 20px;
+  }
+
+  /* ── 로그인 화면 ── */
+  #screen-login { display: flex; flex-direction: column; align-items: center; }
+  .login-title {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 26px; font-weight: 700;
+    color: var(--accent);
+    text-align: center; margin-bottom: 8px;
+  }
+  .login-sub { color: var(--text2); font-size: 14px; text-align: center; margin-bottom: 28px; }
+  .input-label { font-size: 13px; font-weight: 500; color: var(--text2); margin-bottom: 6px; display: block; }
+  .input-field {
+    width: 100%; padding: 12px 16px;
+    border: 1.5px solid var(--border);
+    border-radius: 8px; font-size: 16px;
+    font-family: 'Noto Sans KR', sans-serif;
+    background: var(--surface2);
+    outline: none; transition: border 0.2s;
+  }
+  .input-field:focus { border-color: var(--accent); }
+  .btn-primary {
+    width: 100%; padding: 13px;
+    background: var(--accent); color: #fff;
+    border: none; border-radius: 8px;
+    font-size: 15px; font-weight: 700;
+    font-family: 'Noto Sans KR', sans-serif;
+    cursor: pointer; margin-top: 16px;
+    transition: background 0.2s, transform 0.1s;
+    letter-spacing: 0.5px;
+  }
+  .btn-primary:hover { background: #0f2540; }
+  .btn-primary:active { transform: scale(0.98); }
+
+  /* ── 메뉴 화면 ── */
+  .profile-bar {
+    background: var(--accent);
+    color: #fff;
+    border-radius: var(--radius);
+    padding: 18px 24px;
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 20px;
+  }
+  .profile-name { font-size: 17px; font-weight: 700; }
+  .profile-sub { font-size: 12px; opacity: 0.7; margin-top: 2px; }
+  .btn-logout {
+    background: rgba(255,255,255,0.15); color: #fff;
+    border: 1px solid rgba(255,255,255,0.3);
+    border-radius: 6px; padding: 6px 14px;
+    font-size: 12px; cursor: pointer;
+    font-family: 'Noto Sans KR', sans-serif;
+    transition: background 0.2s;
+  }
+  .btn-logout:hover { background: rgba(255,255,255,0.25); }
+
+  .menu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 20px; }
+  .menu-card {
+    background: var(--surface);
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius);
+    padding: 24px 20px;
+    cursor: pointer;
+    transition: border-color 0.2s, box-shadow 0.2s, transform 0.15s;
+    text-align: center;
+  }
+  .menu-card:hover { border-color: var(--accent); box-shadow: 0 4px 20px rgba(26,58,92,0.15); transform: translateY(-2px); }
+  .menu-card.active-stage { border-color: var(--accent2); }
+  .menu-stage-num {
+    font-size: 32px; font-weight: 900; color: var(--accent);
+    font-family: 'Noto Serif KR', serif; line-height: 1;
+  }
+  .menu-stage-label { font-size: 13px; font-weight: 700; color: var(--accent2); margin: 6px 0 4px; }
+  .menu-stage-desc { font-size: 12px; color: var(--text2); line-height: 1.5; }
+  .menu-stage-score {
+    margin-top: 10px; font-size: 12px; color: var(--text3);
+    border-top: 1px solid var(--border); padding-top: 8px;
+  }
+  .menu-stage-score strong { color: var(--accent); font-weight: 700; }
+
+  .stats-card {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 16px 20px;
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 10px; text-align: center;
+  }
+  .stat-item .stat-val { font-size: 22px; font-weight: 900; color: var(--accent); }
+  .stat-item .stat-lbl { font-size: 11px; color: var(--text2); margin-top: 2px; }
+
+  /* ── 퀴즈 화면 ── */
+  .quiz-topbar {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 20px;
+  }
+  .btn-back {
+    background: none; border: 1.5px solid var(--border);
+    border-radius: 7px; padding: 7px 14px;
+    font-size: 13px; color: var(--text2); cursor: pointer;
+    font-family: 'Noto Sans KR', sans-serif;
+    transition: border-color 0.2s;
+  }
+  .btn-back:hover { border-color: var(--accent); color: var(--accent); }
+  .quiz-badge {
+    background: var(--accent); color: #fff;
+    border-radius: 20px; padding: 5px 14px;
+    font-size: 12px; font-weight: 700;
+  }
+  .quiz-progress-wrap { flex: 1; margin: 0 16px; }
+  .quiz-progress-bar {
+    height: 6px; background: var(--border); border-radius: 3px; overflow: hidden;
+  }
+  .quiz-progress-fill {
+    height: 100%; background: var(--accent2); border-radius: 3px;
+    transition: width 0.4s ease;
+  }
+  .quiz-progress-text { font-size: 11px; color: var(--text3); text-align: right; margin-top: 3px; }
+
+  /* 문제 카드 */
+  .question-label {
+    font-size: 11px; font-weight: 700; letter-spacing: 1.5px;
+    color: var(--accent2); text-transform: uppercase; margin-bottom: 10px;
+  }
+  .question-content {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px; padding: 20px 24px;
+    margin-bottom: 20px;
+  }
+  .question-main {
+    font-size: 22px; font-weight: 700; color: var(--accent);
+    font-family: 'Noto Serif KR', serif; letter-spacing: 1px;
+    margin-bottom: 6px;
+  }
+  .question-hint { font-size: 13px; color: var(--text2); }
+
+  /* 선택지 */
+  .choices-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
+  .choice-btn {
+    background: var(--surface); border: 1.5px solid var(--border);
+    border-radius: 8px; padding: 14px 16px;
+    font-size: 14px; font-weight: 500; color: var(--text);
+    font-family: 'Noto Sans KR', sans-serif;
+    cursor: pointer; text-align: center;
+    transition: all 0.15s;
+  }
+  .choice-btn:hover:not(:disabled) { border-color: var(--accent); background: #eef2f7; }
+  .choice-btn.selected { border-color: var(--accent); background: #eef2f7; font-weight: 700; }
+  .choice-btn.correct { border-color: var(--correct); background: var(--correct-bg); color: var(--correct); font-weight: 700; }
+  .choice-btn.wrong { border-color: var(--wrong); background: var(--wrong-bg); color: var(--wrong); font-weight: 700; }
+  .choice-btn:disabled { cursor: default; }
+
+  /* 피드백 */
+  .feedback-box {
+    border-radius: 8px; padding: 14px 18px;
+    font-size: 13px; line-height: 1.6;
+    margin-bottom: 16px; display: none;
+  }
+  .feedback-box.show { display: block; }
+  .feedback-box.correct { background: var(--correct-bg); border: 1px solid #a8d5be; color: var(--correct); }
+  .feedback-box.wrong { background: var(--wrong-bg); border: 1px solid #d5a8a8; color: var(--wrong); }
+  .feedback-title { font-weight: 700; font-size: 14px; margin-bottom: 4px; }
+
+  .btn-next {
+    width: 100%; padding: 13px;
+    background: var(--accent2); color: #fff;
+    border: none; border-radius: 8px;
+    font-size: 15px; font-weight: 700;
+    font-family: 'Noto Sans KR', sans-serif;
+    cursor: pointer; display: none;
+    transition: background 0.2s;
+  }
+  .btn-next.show { display: block; }
+  .btn-next:hover { background: #a87a2a; }
+
+  /* 2단계 제증명 */
+  .certificate-form {
+    background: #fff;
+    border: 2px solid #333;
+    border-radius: 4px;
+    padding: 0;
+    font-family: 'Noto Serif KR', serif;
+    font-size: 13px;
+    max-width: 500px;
+    margin: 0 auto 20px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  }
+  .cert-header {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    border-bottom: 2px solid #333;
+  }
+  .cert-title-box {
+    padding: 10px 14px;
+    border-right: 2px solid #333;
+  }
+  .cert-title {
+    font-size: 22px; font-weight: 900;
+    letter-spacing: 10px; color: #111;
+  }
+  .cert-circle {
+    display: inline-block;
+    width: 28px; height: 28px;
+    border: 2px solid #111;
+    border-radius: 50%;
+    text-align: center; line-height: 24px;
+    font-size: 14px; font-weight: 700;
+    margin-right: 6px; vertical-align: middle;
+  }
+  .cert-notice {
+    padding: 10px 12px;
+    font-size: 11px; line-height: 1.5;
+    color: #333;
+    font-family: 'Noto Sans KR', sans-serif;
+  }
+  .cert-row {
+    display: grid;
+    grid-template-columns: 90px 1fr;
+    border-bottom: 1px solid #555;
+  }
+  .cert-row-label {
+    padding: 7px 10px;
+    font-size: 12px; font-weight: 700;
+    border-right: 1px solid #555;
+    background: #f8f8f8;
+    display: flex; align-items: center;
+    gap: 4px;
+  }
+  .cert-dot { color: #111; font-size: 16px; }
+  .cert-row-value {
+    padding: 7px 12px;
+    font-size: 13px; color: #111;
+    font-family: 'Noto Sans KR', sans-serif;
+    font-weight: 500;
+  }
+  .cert-body-text {
+    padding: 10px 14px;
+    font-size: 12px; line-height: 1.8;
+    color: #333; border-bottom: 1px solid #555;
+    font-family: 'Noto Sans KR', sans-serif;
+  }
+  .cert-date-row {
+    padding: 8px 14px;
+    text-align: center; font-size: 12px;
+    border-bottom: 1px solid #555;
+    font-family: 'Noto Sans KR', sans-serif;
+  }
+  .cert-table {
+    width: 100%; border-collapse: collapse;
+    font-size: 11px;
+  }
+  .cert-table th, .cert-table td {
+    border: 1px solid #555; padding: 5px 6px;
+    text-align: center;
+    font-family: 'Noto Sans KR', sans-serif;
+  }
+  .cert-table th {
+    background: #eee; font-weight: 700; font-size: 10px;
+  }
+  .cert-table td { font-size: 12px; }
+  .cert-table .circled { font-size: 18px; color: #111; }
+  .cert-table-header {
+    padding: 8px 10px;
+    background: #f0f0f0;
+    font-size: 11px; font-weight: 700;
+    border-bottom: 1px solid #555;
+    text-align: center;
+    font-family: 'Noto Sans KR', sans-serif;
+  }
+  .cert-footer {
+    padding: 10px 14px;
+    text-align: right;
+    font-size: 14px; font-weight: 700;
+    border-top: 1px solid #555;
+  }
+
+  /* 결과 화면 */
+  .result-score-circle {
+    width: 120px; height: 120px;
+    border: 6px solid var(--accent);
+    border-radius: 50%;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    margin: 0 auto 20px;
+  }
+  .result-score-num { font-size: 36px; font-weight: 900; color: var(--accent); line-height: 1; }
+  .result-score-den { font-size: 13px; color: var(--text2); }
+  .result-grade { font-size: 22px; font-weight: 700; text-align: center; margin-bottom: 6px; }
+  .result-sub { font-size: 13px; color: var(--text2); text-align: center; margin-bottom: 24px; }
+
+  .result-list { list-style: none; }
+  .result-item {
+    display: flex; align-items: flex-start; gap: 10px;
+    padding: 10px 0; border-bottom: 1px solid var(--border);
+    font-size: 13px;
+  }
+  .result-item:last-child { border-bottom: none; }
+  .result-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+  .result-item-q { color: var(--text2); }
+  .result-item-a { font-weight: 500; color: var(--text); }
+  .result-item-wrong { color: var(--wrong); font-weight: 500; }
+
+  .btn-retry {
+    width: 100%; padding: 13px;
+    background: var(--surface2); color: var(--accent);
+    border: 1.5px solid var(--accent); border-radius: 8px;
+    font-size: 15px; font-weight: 700;
+    font-family: 'Noto Sans KR', sans-serif;
+    cursor: pointer; margin-top: 12px;
+    transition: background 0.2s;
+  }
+  .btn-retry:hover { background: #dde5ef; }
+
+  /* 반응형 */
+  @media (max-width: 500px) {
+    .menu-grid { grid-template-columns: 1fr; }
+    .choices-grid { grid-template-columns: 1fr; }
+    .card { padding: 20px 16px; }
+    .quiz-badge { display: none; }
+  }
+
+  .hidden { display: none !important; }
+  .fade-in { animation: fadeIn 0.3s ease; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+  /* ── 학습 페이지 ── */
+  .study-menu-btn {
+    width: 100%; padding: 13px;
+    background: var(--surface); color: var(--accent);
+    border: 1.5px solid var(--accent); border-radius: 8px;
+    font-size: 15px; font-weight: 700;
+    font-family: 'Noto Sans KR', sans-serif;
+    cursor: pointer; margin-top: 12px;
+    transition: background 0.2s;
+    letter-spacing: 0.3px;
+  }
+  .study-menu-btn:hover { background: #eef2f7; }
+
+  /* 탭 */
+  .study-tabs {
+    display: flex; gap: 8px; margin-bottom: 20px;
+    flex-wrap: wrap;
+  }
+  .study-tab {
+    padding: 8px 18px;
+    border: 1.5px solid var(--border);
+    border-radius: 20px;
+    background: var(--surface); color: var(--text2);
+    font-size: 13px; font-weight: 500;
+    font-family: 'Noto Sans KR', sans-serif;
+    cursor: pointer; transition: all 0.15s;
+  }
+  .study-tab.active {
+    background: var(--accent); color: #fff;
+    border-color: var(--accent); font-weight: 700;
+  }
+  .study-tab:hover:not(.active) { border-color: var(--accent); color: var(--accent); }
+
+  /* 학습 섹션 */
+  .study-section { display: none; }
+  .study-section.active { display: block; }
+
+  .study-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    margin-bottom: 16px;
+    overflow: hidden;
+  }
+  .study-card-header {
+    background: var(--accent);
+    color: #fff;
+    padding: 12px 20px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .study-card-header .dept-badge {
+    background: var(--accent2);
+    color: #fff;
+    border-radius: 4px; padding: 2px 8px;
+    font-size: 11px; font-weight: 700; letter-spacing: 0.5px;
+  }
+  .study-card-header .dept-name {
+    font-size: 15px; font-weight: 700;
+  }
+  .study-card-body { padding: 16px 20px; }
+
+  /* 코드 태그들 */
+  .code-group { margin-bottom: 12px; }
+  .code-group-label {
+    font-size: 11px; font-weight: 700; color: var(--text3);
+    letter-spacing: 1px; margin-bottom: 6px;
+  }
+  .code-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+  .chip {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 13px; font-weight: 600;
+    font-family: 'Noto Serif KR', serif;
+    letter-spacing: 1px;
+  }
+  .chip-regular { background: #eef2f7; color: var(--accent); border: 1px solid #c5d3e0; }
+  .chip-exception { background: #fdf3e3; color: #7a5000; border: 1px solid #e8c97a; }
+  .chip-note { background: var(--surface2); color: var(--text2); border: 1px solid var(--border); font-size: 11px; padding: 3px 10px; }
+
+  /* 재판부 범위 */
+  .range-row {
+    display: flex; align-items: baseline; gap: 8px;
+    padding: 5px 0; border-bottom: 1px dashed var(--border);
+    font-size: 13px;
+  }
+  .range-row:last-child { border-bottom: none; }
+  .range-label { color: var(--text2); min-width: 90px; font-weight: 500; font-size: 12px; }
+  .range-value { color: var(--accent); font-weight: 600; flex: 1; }
+  .range-exclude { color: var(--wrong); font-size: 11px; }
+
+  /* 제증명 법칙 */
+  .rule-item {
+    display: flex; gap: 14px; align-items: flex-start;
+    padding: 14px 0; border-bottom: 1px solid var(--border);
+  }
+  .rule-item:last-child { border-bottom: none; }
+  .rule-num {
+    width: 28px; height: 28px; flex-shrink: 0;
+    background: var(--accent); color: #fff;
+    border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 700;
+  }
+  .rule-body { flex: 1; }
+  .rule-cond { font-size: 13px; color: var(--text); line-height: 1.7; margin-bottom: 4px; }
+  .rule-cond strong { color: var(--accent); }
+  .rule-result {
+    display: inline-block;
+    background: var(--correct-bg); color: var(--correct);
+    border: 1px solid #a8d5be;
+    border-radius: 4px; padding: 2px 10px;
+    font-size: 12px; font-weight: 700;
+  }
+  .rule-note { font-size: 11px; color: var(--text3); margin-top: 4px; }
+
+  /* 심급 안내 표 */
+  .info-table {
+    width: 100%; border-collapse: collapse;
+    font-size: 12px; margin-top: 8px;
+  }
+  .info-table th {
+    background: var(--surface2); color: var(--accent);
+    padding: 7px 10px; border: 1px solid var(--border);
+    font-weight: 700; text-align: center;
+  }
+  .info-table td {
+    padding: 7px 10px; border: 1px solid var(--border);
+    text-align: center; color: var(--text);
+  }
+  .info-table tr:nth-child(even) td { background: #fafaf8; }
+
+  .study-tip {
+    background: #fdf8ee;
+    border: 1px solid #e8c97a;
+    border-left: 4px solid var(--accent2);
+    border-radius: 6px; padding: 12px 16px;
+    font-size: 12px; color: #6a4d00; line-height: 1.7;
+    margin-top: 10px;
+  }
+  .study-tip strong { color: #7a5000; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-emblem">法</div>
+  <div>
+    <div class="header-title">서울중앙지방법원 총무과</div>
+    <div class="header-sub">우편물 분류 교육 시스템</div>
+  </div>
+</header>
+
+<div class="container">
+
+  <!-- 로그인 -->
+  <div id="screen-login" class="fade-in">
+    <div class="card" style="width:100%;max-width:400px;margin:0 auto;">
+      <div class="login-title">우편물 분류<br>교육 시스템</div>
+      <div class="login-sub">사회복무요원 이름을 입력하여 시작하세요</div>
+      <label class="input-label">이름</label>
+      <input class="input-field" id="name-input" type="text" placeholder="홍길동" maxlength="10">
+      <button class="btn-primary" onclick="login()">시작하기</button>
+    </div>
+  </div>
+
+  <!-- 메뉴 -->
+  <div id="screen-menu" class="hidden fade-in">
+    <div class="profile-bar">
+      <div>
+        <div class="profile-name" id="profile-name-display"></div>
+        <div class="profile-sub">사회복무요원</div>
+      </div>
+      <button class="btn-logout" onclick="logout()">로그아웃</button>
+    </div>
+
+    <div class="menu-grid">
+      <div class="menu-card" onclick="startStage(1)">
+        <div class="menu-stage-num">1</div>
+        <div class="menu-stage-label">단계</div>
+        <div class="menu-stage-desc">부호문자 또는<br>재판부·계 텍스트 제시</div>
+        <div class="menu-stage-score">최고 <strong id="best1">-</strong> / 10</div>
+      </div>
+      <div class="menu-card" onclick="startStage(2)">
+        <div class="menu-stage-num">2</div>
+        <div class="menu-stage-label">단계</div>
+        <div class="menu-stage-desc">제증명 신청서<br>이미지 제시</div>
+        <div class="menu-stage-score">최고 <strong id="best2">-</strong> / 10</div>
+      </div>
+    </div>
+
+    <div class="stats-card">
+      <div class="stat-item">
+        <div class="stat-val" id="stat-total">0</div>
+        <div class="stat-lbl">총 풀이 수</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-val" id="stat-correct">0</div>
+        <div class="stat-lbl">정답 수</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-val" id="stat-rate">0%</div>
+        <div class="stat-lbl">정답률</div>
+      </div>
+    </div>
+
+    <button class="study-menu-btn" onclick="showScreen('screen-study')">📖 학습하기 — 분류 체계 & 법칙 보기</button>
+  </div>
+
+  <!-- 학습 -->
+  <div id="screen-study" class="hidden fade-in">
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px;">
+      <button class="btn-back" onclick="goMenu()">← 메뉴</button>
+      <div style="font-size:17px;font-weight:700;color:var(--accent);">분류 체계 학습</div>
+    </div>
+
+    <div class="study-tabs">
+      <button class="study-tab active" onclick="switchTab('tab-case')">📋 사건번호</button>
+      <button class="study-tab" onclick="switchTab('tab-court')">🏛 재판부·계</button>
+      <button class="study-tab" onclick="switchTab('tab-cert')">📄 제증명 법칙</button>
+      <button class="study-tab" onclick="switchTab('tab-system')">ℹ️ 번호 체계</button>
+    </div>
+
+    <!-- 탭1: 사건번호 -->
+    <div class="study-section active" id="tab-case">
+
+      <div class="study-card">
+        <div class="study-card-header"><span class="dept-name">종합민원실</span></div>
+        <div class="study-card-body">
+          <div class="code-group">
+            <div class="code-group-label">정규 조합 — (앞) × (뒤)</div>
+            <div class="code-chips">
+              <span class="chip chip-regular">가합</span><span class="chip chip-regular">가단</span>
+              <span class="chip chip-regular">나합</span><span class="chip chip-regular">나단</span>
+              <span class="chip chip-regular">다합</span><span class="chip chip-regular">다단</span>
+            </div>
+          </div>
+          <div class="code-group">
+            <div class="code-group-label">예외 코드</div>
+            <div class="code-chips">
+              <span class="chip chip-exception">차전</span><span class="chip chip-exception">머</span>
+            </div>
+          </div>
+          <div class="study-tip">⚠️ <strong>조건:</strong> 위 조합 중 타 부서에 해당하지 않는 모든 사건번호. 향후 인덱스 업데이트 시에도 이 원칙이 우선 적용됩니다.</div>
+        </div>
+      </div>
+
+      <div class="study-card">
+        <div class="study-card-header"><span class="dept-name">형사접수실</span></div>
+        <div class="study-card-body">
+          <div class="code-group">
+            <div class="code-group-label">정규 조합 — (앞) × (뒤)</div>
+            <div class="code-chips">
+              <span class="chip chip-regular">고합</span><span class="chip chip-regular">고약</span><span class="chip chip-regular">고정</span>
+              <span class="chip chip-regular">노합</span><span class="chip chip-regular">노약</span><span class="chip chip-regular">노정</span>
+              <span class="chip chip-regular">도합</span><span class="chip chip-regular">도약</span><span class="chip chip-regular">도정</span>
+            </div>
+          </div>
+          <div class="code-group">
+            <div class="code-group-label">예외 코드</div>
+            <div class="code-chips">
+              <span class="chip chip-exception">초기</span><span class="chip chip-exception">형제</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="study-card">
+        <div class="study-card-header"><span class="dept-name">민사집행과</span></div>
+        <div class="study-card-body">
+          <div class="code-group">
+            <div class="code-group-label">정규 조합 — (앞) × (뒤)</div>
+            <div class="code-chips">
+              <span class="chip chip-regular">타채</span><span class="chip chip-regular">타경</span><span class="chip chip-regular">타인</span>
+            </div>
+          </div>
+          <div class="code-group">
+            <div class="code-group-label">예외 코드</div>
+            <div class="code-chips">
+              <span class="chip chip-exception">카불</span><span class="chip chip-exception">카명</span><span class="chip chip-exception">카조</span><span class="chip chip-exception">정명</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="study-card">
+        <div class="study-card-header"><span class="dept-name">민사신청과</span></div>
+        <div class="study-card-body">
+          <div class="code-group">
+            <div class="code-group-label">정규 조합 — (앞) × (뒤)</div>
+            <div class="code-chips">
+              <span class="chip chip-regular">카합</span><span class="chip chip-regular">카단</span><span class="chip chip-regular">카경</span><span class="chip chip-regular">카담</span>
+            </div>
+          </div>
+          <div class="code-group">
+            <div class="code-group-label">예외 코드</div>
+            <div class="code-chips">
+              <span class="chip chip-exception">자</span><span class="chip chip-exception">과</span><span class="chip chip-exception">비단</span><span class="chip chip-exception">비합</span>
+            </div>
+          </div>
+          <div class="study-tip">⚠️ <strong>조건:</strong> 카 계열 중 민사집행과(타채·타경·타인, 카불·카명·카조·정명)에 해당하지 않는 것.</div>
+        </div>
+      </div>
+
+      <div class="study-card">
+        <div class="study-card-header"><span class="dept-name">기록관리과</span></div>
+        <div class="study-card-body">
+          <div class="code-group">
+            <div class="code-group-label">단독 코드</div>
+            <div class="code-chips">
+              <span class="chip chip-regular">카확</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="study-card">
+        <div class="study-card-header"><span class="dept-name">민사소액과</span></div>
+        <div class="study-card-body">
+          <div class="code-group">
+            <div class="code-group-label">정규 조합 — (앞) × (뒤)</div>
+            <div class="code-chips">
+              <span class="chip chip-regular">가소</span><span class="chip chip-regular">나소</span><span class="chip chip-regular">다소</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="study-card">
+        <div class="study-card-header"><span class="dept-name">공탁과</span></div>
+        <div class="study-card-body">
+          <div class="code-group">
+            <div class="code-group-label">단독 코드</div>
+            <div class="code-chips">
+              <span class="chip chip-regular">금</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /tab-case -->
+
+    <!-- 탭2: 재판부·계 -->
+    <div class="study-section" id="tab-court">
+
+      <div class="study-card">
+        <div class="study-card-header"><span class="dept-name">종합민원실</span></div>
+        <div class="study-card-body">
+          <div class="range-row"><span class="range-label">민사 합의부</span><span class="range-value">민사 1~49부, 53~59부, 61~62부</span><span class="range-exclude">※ 50·51·52·60부 제외</span></div>
+          <div class="range-row"><span class="range-label">민사 단독</span><span class="range-value">21~50, 60~73, 80~299, 801~999 민사 단독</span></div>
+          <div class="range-row"><span class="range-label">계</span><span class="range-value">독촉 1~50계</span></div>
+          <div class="study-tip">⚠️ 민사 합의부·단독 모두 <strong>타 부서 해당 없는 것</strong>이 원칙입니다.</div>
+        </div>
+      </div>
+
+      <div class="study-card">
+        <div class="study-card-header"><span class="dept-name">형사접수실</span></div>
+        <div class="study-card-body">
+          <div class="range-row"><span class="range-label">형사 합의부</span><span class="range-value">형사 1~37부</span></div>
+          <div class="range-row"><span class="range-label">형사 단독</span><span class="range-value">1~48 형사 단독</span></div>
+          <div class="range-row"><span class="range-label">계</span><span class="range-value">약식계, 배상명령계</span></div>
+        </div>
+      </div>
+
+      <div class="study-card">
+        <div class="study-card-header"><span class="dept-name">민사집행과</span></div>
+        <div class="study-card-body">
+          <div class="range-row"><span class="range-label">민사 단독</span><span class="range-value">51, 52 민사 단독</span></div>
+          <div class="range-row"><span class="range-label">계</span><span class="range-value">경매 1~20계, 기타집행 1~50계</span></div>
+        </div>
+      </div>
+
+      <div class="study-card">
+        <div class="study-card-header"><span class="dept-name">민사신청과</span></div>
+        <div class="study-card-body">
+          <div class="range-row"><span class="range-label">민사 합의부</span><span class="range-value">민사 50·51·52·60부</span></div>
+          <div class="range-row"><span class="range-label">민사 단독</span><span class="range-value">53~59, 74~79 민사 단독</span></div>
+        </div>
+      </div>
+
+      <div class="study-card">
+        <div class="study-card-header"><span class="dept-name">기록관리과</span></div>
+        <div class="study-card-body">
+          <div class="range-row"><span class="range-label">계</span><span class="range-value">소송비용 1~20계, 보존 1~30계</span></div>
+        </div>
+      </div>
+
+      <div class="study-card">
+        <div class="study-card-header"><span class="dept-name">민사소액과</span></div>
+        <div class="study-card-body">
+          <div class="range-row"><span class="range-label">민사 단독</span><span class="range-value">1~20, 300~800, 1000~1030 민사 단독</span></div>
+        </div>
+      </div>
+
+      <div class="study-card">
+        <div class="study-card-header"><span class="dept-name">공탁과</span></div>
+        <div class="study-card-body">
+          <div class="range-row"><span class="range-label">계</span><span class="range-value">공탁계</span></div>
+        </div>
+      </div>
+
+    </div><!-- /tab-court -->
+
+    <!-- 탭3: 제증명 법칙 -->
+    <div class="study-section" id="tab-cert">
+
+      <div class="study-card">
+        <div class="study-card-header"><span class="dept-name">제증명 신청서 부서 분류 법칙</span><span class="dept-badge">우선순위 順</span></div>
+        <div class="study-card-body">
+
+          <div class="rule-item">
+            <div class="rule-num">1</div>
+            <div class="rule-body">
+              <div class="rule-cond"><strong>사건번호가 형사 사건</strong>인 경우<br><span style="font-size:11px;color:var(--text3);">고·노·도 계열 및 예외(초기, 형제) 포함</span></div>
+              <span class="rule-result">→ 형사접수실</span>
+              <div class="rule-note">신청 종류·연도 무관하게 항상 적용되는 최우선 규칙</div>
+            </div>
+          </div>
+
+          <div class="rule-item">
+            <div class="rule-num">2</div>
+            <div class="rule-body">
+              <div class="rule-cond">신청 종류 = <strong>승계송달증명</strong></div>
+              <span class="rule-result">→ 종합민원실</span>
+              <div class="rule-note">형사 사건이 아닌 경우에 한함</div>
+            </div>
+          </div>
+
+          <div class="rule-item">
+            <div class="rule-num">3</div>
+            <div class="rule-body">
+              <div class="rule-cond">사건번호가 <strong>민사신청과</strong> 해당 + 신청 종류 = <strong>송달증명</strong> 또는 <strong>확정증명</strong></div>
+              <span class="rule-result">→ 종합민원실</span>
+            </div>
+          </div>
+
+          <div class="rule-item">
+            <div class="rule-num">4</div>
+            <div class="rule-body">
+              <div class="rule-cond">사건번호가 <strong>종합민원실</strong> 또는 <strong>민사소액과</strong> 해당</div>
+              <span class="rule-result">→ 종합민원실</span>
+              <div class="rule-note">연도·신청 종류 무관</div>
+            </div>
+          </div>
+
+          <div class="rule-item">
+            <div class="rule-num">5</div>
+            <div class="rule-body">
+              <div class="rule-cond">신청 종류 = <strong>집행문 부여</strong> 또는 <strong>재판서·조서의 정본·등본·초본</strong><br>+ 연도가 <strong>최근 4년 이전</strong> + 사건번호가 <strong>민사신청과</strong> 또는 <strong>민사집행과</strong> 해당</div>
+              <span class="rule-result">→ 기록관리과</span>
+            </div>
+          </div>
+
+          <div class="rule-item">
+            <div class="rule-num">6</div>
+            <div class="rule-body">
+              <div class="rule-cond">위 1~5 조건 모두 해당 없음</div>
+              <span class="rule-result">→ 사건번호 기준 해당 부서</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="study-card">
+        <div class="study-card-header"><span class="dept-name">신청 종류 목록 (제증명 신청서 표)</span></div>
+        <div class="study-card-body">
+          <div class="range-row"><span class="range-label" style="min-width:30px;">①</span><span class="range-value">집행문 부여</span></div>
+          <div class="range-row"><span class="range-label" style="min-width:30px;">②</span><span class="range-value">송달증명</span></div>
+          <div class="range-row"><span class="range-label" style="min-width:30px;">③</span><span class="range-value">확정증명</span></div>
+          <div class="range-row"><span class="range-label" style="min-width:30px;">④</span><span class="range-value">승계송달증명</span></div>
+          <div class="range-row"><span class="range-label" style="min-width:30px;">⑤</span><span class="range-value">재판서·조서의 정본·등본·초본</span></div>
+        </div>
+      </div>
+
+    </div><!-- /tab-cert -->
+
+    <!-- 탭4: 번호 체계 -->
+    <div class="study-section" id="tab-system">
+
+      <div class="study-card">
+        <div class="study-card-header"><span class="dept-name">사건번호 구조</span></div>
+        <div class="study-card-body">
+          <p style="font-size:13px;color:var(--text2);margin-bottom:14px;line-height:1.8;">
+            사건번호는 <strong>(접수연도) + (부호문자) + (개별 진행번호)</strong>로 구성됩니다.<br>
+            예: <strong style="color:var(--accent);font-family:'Noto Serif KR',serif;font-size:15px;">2016도6809</strong>
+            &nbsp;→&nbsp; 2016년 접수 / 부호문자 <strong>도</strong> / 진행번호 6809<br>
+            <span style="color:var(--text3);font-size:12px;">※ 부서 분류는 <strong>접수연도</strong>와 <strong>부호문자</strong>만으로 결정하며, 진행번호는 분류에 영향을 주지 않습니다.</span>
+          </p>
+
+          <div class="code-group-label" style="margin-bottom:10px;">부호문자 읽는 법 — 자음(심급) × 모음(민사·형사)</div>
+
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;">
+            <div style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:12px 14px;">
+              <div style="font-size:11px;font-weight:700;color:var(--text3);letter-spacing:1px;margin-bottom:8px;">자음 → 심급</div>
+              <div style="font-size:13px;line-height:2;">
+                <span style="font-weight:700;color:var(--accent);">ㄱ</span> = 1심&nbsp;&nbsp;
+                <span style="font-weight:700;color:var(--accent);">ㄴ</span> = 2심&nbsp;&nbsp;
+                <span style="font-weight:700;color:var(--accent);">ㄷ</span> = 3심
+              </div>
+              <div style="font-size:11px;color:var(--text3);margin-top:4px;">예: <strong>가</strong>(ㄱ=1심), <strong>나</strong>(ㄴ=2심), <strong>다</strong>(ㄷ=3심)</div>
+            </div>
+            <div style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:12px 14px;">
+              <div style="font-size:11px;font-weight:700;color:var(--text3);letter-spacing:1px;margin-bottom:8px;">모음 → 재판 종류</div>
+              <div style="font-size:13px;line-height:2;">
+                <span style="font-weight:700;color:var(--correct);">ㅏ</span> = 민사&nbsp;&nbsp;
+                <span style="font-weight:700;color:var(--wrong);">ㅗ</span> = 형사
+              </div>
+              <div style="font-size:11px;color:var(--text3);margin-top:4px;">예: <strong>가·나·다·타·카</strong>(ㅏ=민사), <strong>고·노·도</strong>(ㅗ=형사)</div>
+            </div>
+          </div>
+
+          <div class="study-tip" style="margin-bottom:14px;">
+            💡 <strong>모음 규칙은 예외 없이 항상 적용됩니다.</strong><br>
+            타·카 등은 자음이 ㄱ·ㄴ·ㄷ 규칙 밖에 있을 뿐, 모음이 <strong>ㅏ</strong>이므로 <strong>민사 사건</strong>에 해당합니다.<br>
+            2글자 부호문자라면 앞 1자의 모음이 <strong>ㅏ이면 민사</strong>, <strong>ㅗ이면 형사</strong>로 항상 판단할 수 있습니다.
+          </div>
+
+          <div class="code-group-label" style="margin-bottom:8px;">뒤 글자(부호문자 둘째 자) — 사건 형태</div>
+          <table class="info-table">
+            <thead>
+              <tr><th>뒤 글자</th><th>의미</th><th>예시</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><strong>합</strong></td><td>합의심 (판사 여럿)</td><td>가합, 고합</td></tr>
+              <tr><td><strong>단</strong></td><td>단독심 (판사 1명)</td><td>가단, 나단</td></tr>
+              <tr><td><strong>소</strong></td><td>소액 사건</td><td>가소, 나소</td></tr>
+              <tr><td><strong>약</strong></td><td>약식 사건</td><td>고약</td></tr>
+              <tr><td><strong>정</strong></td><td>정식재판 청구</td><td>고정</td></tr>
+              <tr><td><strong>채·경·인</strong></td><td>집행 관련</td><td>타채, 타경, 타인</td></tr>
+              <tr><td><strong>합·단·경·담</strong></td><td>신청 관련</td><td>카합, 카담</td></tr>
+            </tbody>
+          </table>
+
+          <div class="study-tip" style="margin-top:12px;">
+            ⚠️ <strong>예외 코드</strong>(차전, 머, 초기, 형제, 카불, 카명, 카조, 정명, 자, 과, 비단, 비합, 카확, 금)는
+            위 규칙과 무관한 <strong>독립된 고유 코드</strong>로, 별도로 암기해야 합니다.
+          </div>
+        </div>
+      </div>
+
+      <div class="study-card">
+        <div class="study-card-header"><span class="dept-name">재판부 형식 안내</span></div>
+        <div class="study-card-body">
+          <table class="info-table">
+            <thead>
+              <tr><th>형식</th><th>예시</th><th>의미</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>민사 n부</td><td>민사 12부</td><td>민사 합의 재판부</td></tr>
+              <tr><td>n 민사 단독</td><td>35 민사 단독</td><td>민사 단독 재판부</td></tr>
+              <tr><td>형사 n부</td><td>형사 7부</td><td>형사 합의 재판부</td></tr>
+              <tr><td>n 형사 단독</td><td>20 형사 단독</td><td>형사 단독 재판부</td></tr>
+              <tr><td>○○ n계</td><td>경매 5계</td><td>해당 부서 담당계</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div><!-- /tab-system -->
+
+  </div><!-- /screen-study -->
+
+  <!-- 퀴즈 -->
+  <div id="screen-quiz" class="hidden fade-in">
+    <div class="quiz-topbar">
+      <button class="btn-back" onclick="goMenu()">← 메뉴</button>
+      <div class="quiz-progress-wrap">
+        <div class="quiz-progress-bar"><div class="quiz-progress-fill" id="progress-fill" style="width:0%"></div></div>
+        <div class="quiz-progress-text" id="progress-text">0 / 10</div>
+      </div>
+      <div class="quiz-badge" id="stage-badge">1단계</div>
+    </div>
+
+    <div class="card">
+      <div class="question-label" id="q-label">사건번호</div>
+      <div id="q-stage1-content">
+        <div class="question-content">
+          <div class="question-main" id="q-main"></div>
+          <div class="question-hint" id="q-hint"></div>
+        </div>
+      </div>
+      <div id="q-stage2-content" class="hidden">
+        <div id="cert-render"></div>
+      </div>
+
+      <div class="choices-grid" id="choices-grid"></div>
+
+      <div class="feedback-box" id="feedback-box">
+        <div class="feedback-title" id="feedback-title"></div>
+        <div id="feedback-desc"></div>
+      </div>
+      <button class="btn-next" id="btn-next" onclick="nextQuestion()">다음 문제 →</button>
+    </div>
+  </div>
+
+  <!-- 결과 -->
+  <div id="screen-result" class="hidden fade-in">
+    <div class="card">
+      <div class="result-score-circle">
+        <div class="result-score-num" id="result-score"></div>
+        <div class="result-score-den">/ 10</div>
+      </div>
+      <div class="result-grade" id="result-grade"></div>
+      <div class="result-sub" id="result-sub"></div>
+      <ul class="result-list" id="result-list"></ul>
+      <button class="btn-primary" onclick="retryStage()">다시 풀기</button>
+      <button class="btn-retry" onclick="goMenu()">메뉴로 돌아가기</button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// ══════════════════════════════════════════
+//  데이터베이스
+// ══════════════════════════════════════════
+
+const DEPARTMENTS_7 = [
+  '종합민원실','형사접수실','민사집행과','민사신청과','기록관리과','민사소액과','공탁과'
+];
+
+// 사건번호 DB
+const CASE_DB = {
+  종합민원실: {
+    regular: { front: ['가','나','다'], back: ['합','단'] },
+    exceptions: ['차전','머'],
+    condition: 'exclude_others' // 타 부서 해당 없는 것
+  },
+  형사접수실: {
+    regular: { front: ['고','노','도'], back: ['합','약','정'] },
+    exceptions: ['초기','형제']
+  },
+  민사집행과: {
+    regular: { front: ['타'], back: ['채','경','인'] },
+    exceptions: ['카불','카명','카조','정명']
+  },
+  민사신청과: {
+    regular: { front: ['카'], back: ['합','단','경','담'] },
+    exceptions: ['자','과','비단','비합'],
+    condition: 'exclude_집행' // 민사집행과 해당 없는 것
+  },
+  기록관리과: {
+    exceptions: ['카확']
+  },
+  민사소액과: {
+    regular: { front: ['가','나','다'], back: ['소'] }
+  },
+  공탁과: {
+    exceptions: ['금']
+  }
+};
+
+// 재판부·계 DB
+const COURT_DB = {
+  종합민원실: {
+    // 민사 n부: 1~62 중 민사신청과(50,51,52,60) 제외
+    민사부: { range: [1,62], exclude: [50,51,52,60] },
+    // 민사 단독: 21~50, 60~73, 80~299, 801~999
+    민사단독: [
+      [21,50],[60,73],[80,299],[801,999]
+    ],
+    계: { prefix: '독촉', range: [1,50] }
+  },
+  형사접수실: {
+    형사부: { range: [1,37] },
+    형사단독: { range: [1,48] },
+    계: ['약식계','배상명령계']
+  },
+  민사집행과: {
+    민사단독: [[51,52]],
+    계: [
+      { prefix: '경매', range: [1,20] },
+      { prefix: '기타집행', range: [1,50] }
+    ]
+  },
+  민사신청과: {
+    민사부: { fixed: [50,51,52,60] },
+    민사단독: [[53,59],[74,79]]
+  },
+  기록관리과: {
+    계: [
+      { prefix: '소송비용', range: [1,20] },
+      { prefix: '보존', range: [1,30] }
+    ]
+  },
+  민사소액과: {
+    민사단독: [[1,20],[300,800],[1000,1030]]
+  },
+  공탁과: {
+    계: ['공탁계']
+  }
+};
+
+// ══════════════════════════════════════════
+//  유틸리티
+// ══════════════════════════════════════════
+
+function rand(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
+function randInt(min, max) { return Math.floor(Math.random() * (max - min + 1)) + min; }
+
+function randYear() {
+  const now = new Date().getFullYear();
+  const r = Math.random();
+  if (r < 0.6) return randInt(now - 3, now);
+  if (r < 0.9) return randInt(now - 13, now - 4);
+  return randInt(now - 33, now - 14);
+}
+
+function isFormType(code) {
+  // 형사 사건번호 판별 (앞 글자 고/노/도 계열 또는 형사 예외)
+  const formalExceptions = ['초기','형제'];
+  if (formalExceptions.includes(code)) return true;
+  const criminal = ['고','노','도'];
+  return criminal.includes(code[0]);
+}
+
+function isDeptCode(code, dept) {
+  const db = CASE_DB[dept];
+  if (!db) return false;
+  if (db.exceptions && db.exceptions.includes(code)) return true;
+  if (!db.regular) return false;
+  return db.regular.front.includes(code[0]) && db.regular.back.includes(code.slice(1));
+}
+
+function getDeptFromCaseCode(code) {
+  // 우선순위 판별
+  if (isDeptCode(code, '기록관리과')) return '기록관리과';
+  if (isDeptCode(code, '공탁과')) return '공탁과';
+  if (isDeptCode(code, '형사접수실')) return '형사접수실';
+  if (isDeptCode(code, '민사소액과')) return '민사소액과';
+  if (isDeptCode(code, '민사집행과')) return '민사집행과';
+  // 민사신청과: 카 계열이지만 집행 아닌 것
+  if (CASE_DB.민사신청과.exceptions.includes(code)) return '민사신청과';
+  if (code[0] === '카' && !isDeptCode(code, '민사집행과')) return '민사신청과';
+  // 종합민원실
+  if (isDeptCode(code, '종합민원실') || CASE_DB.종합민원실.exceptions.includes(code)) return '종합민원실';
+  return '종합민원실'; // default fallback
+}
+
+// ══════════════════════════════════════════
+//  1단계 문제 생성
+// ══════════════════════════════════════════
+
+function generateAllCaseCodes() {
+  const pool = [];
+  // 종합민원실 정규
+  for (const f of ['가','나','다']) for (const b of ['합','단']) pool.push({ code: f+b, dept: '종합민원실' });
+  for (const e of ['차전','머']) pool.push({ code: e, dept: '종합민원실' });
+  // 형사접수실
+  for (const f of ['고','노','도']) for (const b of ['합','약','정']) pool.push({ code: f+b, dept: '형사접수실' });
+  for (const e of ['초기','형제']) pool.push({ code: e, dept: '형사접수실' });
+  // 민사집행과
+  for (const b of ['채','경','인']) pool.push({ code: '타'+b, dept: '민사집행과' });
+  for (const e of ['카불','카명','카조','정명']) pool.push({ code: e, dept: '민사집행과' });
+  // 민사신청과
+  for (const b of ['합','단','경','담']) {
+    const code = '카'+b;
+    if (!isDeptCode(code, '민사집행과')) pool.push({ code, dept: '민사신청과' });
+  }
+  for (const e of ['자','과','비단','비합']) pool.push({ code: e, dept: '민사신청과' });
+  // 기록관리과
+  pool.push({ code: '카확', dept: '기록관리과' });
+  // 민사소액과
+  for (const f of ['가','나','다']) pool.push({ code: f+'소', dept: '민사소액과' });
+  // 공탁과
+  pool.push({ code: '금', dept: '공탁과' });
+  return pool;
+}
+
+function generateCourtItems() {
+  const pool = [];
+
+  // 종합민원실 민사부
+  const excludeParts = [50,51,52,60];
+  for (let n = 1; n <= 62; n++) {
+    if (!excludeParts.includes(n)) pool.push({ text: `민사 ${n}부`, dept: '종합민원실', hint: '민사 합의부' });
+  }
+  // 종합민원실 민사단독
+  const ranges민사단독종합 = [[21,50],[60,73],[80,299],[801,999]];
+  for (const [s,e] of ranges민사단독종합) {
+    const n = randInt(s,e);
+    pool.push({ text: `${n} 민사 단독`, dept: '종합민원실', hint: '민사 단독' });
+  }
+  // 종합민원실 계
+  for (let n = 1; n <= 50; n++) pool.push({ text: `독촉 ${n}계`, dept: '종합민원실', hint: '독촉계' });
+
+  // 형사접수실 형사부
+  for (let n = 1; n <= 37; n++) pool.push({ text: `형사 ${n}부`, dept: '형사접수실', hint: '형사 합의부' });
+  // 형사접수실 형사단독
+  for (let n = 1; n <= 48; n++) pool.push({ text: `${n} 형사 단독`, dept: '형사접수실', hint: '형사 단독' });
+  // 형사접수실 계
+  pool.push({ text: '약식계', dept: '형사접수실', hint: '형사접수실 담당계' });
+  pool.push({ text: '배상명령계', dept: '형사접수실', hint: '형사접수실 담당계' });
+
+  // 민사집행과 단독
+  pool.push({ text: '51 민사 단독', dept: '민사집행과', hint: '민사 단독' });
+  pool.push({ text: '52 민사 단독', dept: '민사집행과', hint: '민사 단독' });
+  for (let n = 1; n <= 20; n++) pool.push({ text: `경매 ${n}계`, dept: '민사집행과', hint: '경매계' });
+  for (let n = 1; n <= 50; n++) pool.push({ text: `기타집행 ${n}계`, dept: '민사집행과', hint: '기타집행계' });
+
+  // 민사신청과 부
+  for (const n of [50,51,52,60]) pool.push({ text: `민사 ${n}부`, dept: '민사신청과', hint: '민사 합의부' });
+  // 민사신청과 단독
+  const ranges민사단독신청 = [[53,59],[74,79]];
+  for (const [s,e] of ranges민사단독신청) {
+    for (let n = s; n <= e; n++) pool.push({ text: `${n} 민사 단독`, dept: '민사신청과', hint: '민사 단독' });
+  }
+
+  // 기록관리과 계
+  for (let n = 1; n <= 20; n++) pool.push({ text: `소송비용 ${n}계`, dept: '기록관리과', hint: '기록관리과 담당계' });
+  for (let n = 1; n <= 30; n++) pool.push({ text: `보존 ${n}계`, dept: '기록관리과', hint: '기록관리과 담당계' });
+
+  // 민사소액과 단독
+  const ranges소액 = [[1,20],[300,800],[1000,1030]];
+  for (const [s,e] of ranges소액) {
+    const n = randInt(s,e);
+    pool.push({ text: `${n} 민사 단독`, dept: '민사소액과', hint: '민사 단독' });
+  }
+
+  // 공탁과
+  pool.push({ text: '공탁계', dept: '공탁과', hint: '공탁과 담당계' });
+
+  return pool;
+}
+
+function generateStage1Questions(count = 10) {
+  const caseCodes = generateAllCaseCodes();
+  const courtItems = generateCourtItems();
+  const combined = [
+    ...caseCodes.map(c => ({ type: 'case', display: c.code, dept: c.dept, hint: '사건번호' })),
+    ...courtItems.map(c => ({ type: 'court', display: c.text, dept: c.dept, hint: c.hint }))
+  ];
+  // shuffle
+  for (let i = combined.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [combined[i], combined[j]] = [combined[j], combined[i]];
+  }
+  const selected = combined.slice(0, count);
+  return selected.map(item => ({
+    type: item.type,
+    display: item.display,
+    hint: item.hint,
+    answer: item.dept,
+    label: item.type === 'case' ? '부호문자' : '재판부 / 계'
+  }));
+}
+
+// ══════════════════════════════════════════
+//  2단계 문제 생성 (제증명 신청서)
+// ══════════════════════════════════════════
+
+const KOREAN_SURNAMES = ['김','이','박','최','정','강','조','윤','장','임','한','오','서','신','권','황','안','송','류','전','홍','고','문','양','손','배','백','허','유','남','심','노','하','곽','성','차','주','우','구','민','나','진','지','엄','채','원','천','방','공'];
+const KOREAN_NAMES_1 = ['민준','서준','도윤','예준','시우','하준','지호','주원','지훈','건우','우진','현우','선우','재원','민재','현준','정우','민성','준서','지원','서연','서윤','지우','하은','수아','지유','채원','지민','하윤','수빈','다은','아린','예은','수현','나은','지현','주아','윤서','가은','예진'];
+
+function randName() {
+  return rand(KOREAN_SURNAMES) + rand(KOREAN_NAMES_1);
+}
+
+// 제증명 신청 종류
+const CERT_TYPES = [
+  { num: 1, name: '집행문 부여' },
+  { num: 2, name: '송달증명' },
+  { num: 3, name: '확정증명' },
+  { num: 4, name: '승계송달증명' },
+  { num: 5, name: '재판서·조서의\n정본·등본·초본' }
+];
+
+function isCriminalCode(code) {
+  const crimExceptions = ['초기','형제'];
+  if (crimExceptions.includes(code)) return true;
+  return ['고','노','도'].includes(code[0]);
+}
+
+function getDeptFromCert(caseCode, certNum, year) {
+  const now = new Date().getFullYear();
+  const isRecent = year >= now - 3;
+
+  // 1순위: 형사 사건
+  if (isCriminalCode(caseCode)) return { dept: '형사접수실', reason: `형사 사건번호(${caseCode})는 항상 형사접수실로 분류합니다.` };
+
+  // 2순위: 승계송달증명
+  if (certNum === 4) return { dept: '종합민원실', reason: '승계송달증명 신청은 항상 종합민원실로 분류합니다.' };
+
+  // 3순위: 민사신청과 + 송달/확정증명
+  if (getDeptFromCaseCode(caseCode) === '민사신청과' && (certNum === 2 || certNum === 3)) {
+    return { dept: '종합민원실', reason: `민사신청과 사건번호(${caseCode})의 송달/확정증명은 종합민원실로 분류합니다.` };
+  }
+
+  // 4순위: 종합민원실 또는 민사소액과 사건번호
+  const baseDept = getDeptFromCaseCode(caseCode);
+  if (baseDept === '종합민원실' || baseDept === '민사소액과') {
+    return { dept: '종합민원실', reason: `${caseCode} 사건번호는 종합민원실(또는 민사소액과) 소관으로, 제증명은 종합민원실에서 처리합니다.` };
+  }
+
+  // 5순위: 집행문 부여 또는 정본·등본·초본 + 최근 4년 이전 + 민사신청과/민사집행과
+  if ((certNum === 1 || certNum === 5) && !isRecent && (baseDept === '민사신청과' || baseDept === '민사집행과')) {
+    return { dept: '기록관리과', reason: `${year}년 사건으로 최근 4년 이전이며, 집행문 부여/정본 등 신청은 기록관리과로 분류합니다.` };
+  }
+
+  return { dept: baseDept, reason: `${caseCode} 사건번호는 ${baseDept} 소관입니다.` };
+}
+
+// 2단계 문제 생성 시 공탁과(금) 제외
+function generateAllCaseCodesNoGeum() {
+  return generateAllCaseCodes().filter(c => c.code !== '금');
+}
+
+function generateStage2Questions(count = 10) {
+  const caseCodes = generateAllCaseCodesNoGeum();
+  const questions = [];
+  for (let i = 0; i < count; i++) {
+    const caseItem = rand(caseCodes);
+    const year = randYear();
+    const certType = rand(CERT_TYPES);
+    const plaintiff = '김중앙';
+    const defendant = '박지법';
+    const { dept, reason } = getDeptFromCert(caseItem.code, certType.num, year);
+    questions.push({
+      caseCode: caseItem.code,
+      year,
+      certNum: certType.num,
+      certName: certType.name,
+      plaintiff,
+      defendant,
+      answer: dept,
+      reason
+    });
+  }
+  return questions;
+}
+
+// ══════════════════════════════════════════
+//  제증명 신청서 렌더링
+// ══════════════════════════════════════════
+
+function renderCertForm(q) {
+  const circleChar = '○';
+  let rows = '';
+  for (const ct of CERT_TYPES) {
+    const circled = ct.num === q.certNum ? circleChar : '';
+    const nameLines = ct.name.split('\n');
+    const nameHtml = nameLines.length > 1
+      ? nameLines.map(l => `<div>${l}</div>`).join('')
+      : ct.name;
+    rows += `<tr>
+      <td>${ct.num}</td>
+      <td class="${ct.num === q.certNum ? 'circled' : ''}">${circled}</td>
+      <td>${nameHtml}</td>
+      <td></td>
+    </tr>`;
+  }
+
+  return `
+  <div class="certificate-form">
+    <div class="cert-header">
+      <div class="cert-title-box">
+        <div class="cert-title"><span class="cert-circle">①</span>신 청 서</div>
+      </div>
+      <div class="cert-notice">신청인은 ●로 표시된 부분을<br>기재합니다</div>
+    </div>
+    <div class="cert-row">
+      <div class="cert-row-label"><span class="cert-dot">●</span>사 건</div>
+      <div class="cert-row-value">${q.year}년 ${q.caseCode}</div>
+    </div>
+    <div class="cert-row">
+      <div class="cert-row-label"><span class="cert-dot">●</span>원고(채권자,신청인)</div>
+      <div class="cert-row-value">${q.plaintiff}</div>
+    </div>
+    <div class="cert-row" style="border-bottom:2px solid #555;">
+      <div class="cert-row-label"><span class="cert-dot">●</span>피고(채무자,피신청인)</div>
+      <div class="cert-row-value">${q.defendant}</div>
+    </div>
+    <div class="cert-body-text">
+      위 사건에(판결, 결정, 명령, 화해조서, 인낙조서, 조정조서,<br>
+      기타 : &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;) 에 대한 아래의 신청에 따른 제증명을 발급하여 주시기 바랍니다.
+    </div>
+    <div class="cert-date-row">20 . . .&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;전화번호 :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;●신청인 : (원고, 피고)&nbsp;&nbsp;<small>(날인 또는 서명)</small></div>
+    <div class="cert-table-header">신청할 제증명 사항을 신청번호에 ○표하시고,<br>필요한 통수와 발급 대상자의 성명을 기재합니다.</div>
+    <table class="cert-table">
+      <thead>
+        <tr>
+          <th>신청번호</th>
+          <th>발급통수</th>
+          <th>신청의 종류</th>
+          <th>발급 대상자의 성명</th>
+        </tr>
+      </thead>
+      <tbody>${rows}</tbody>
+    </table>
+    <div class="cert-footer">법원 귀중</div>
+  </div>`;
+}
+
+// ══════════════════════════════════════════
+//  선택지 생성 (오답 포함)
+// ══════════════════════════════════════════
+
+function makeChoices(correct, allChoices) {
+  const wrong = allChoices.filter(d => d !== correct);
+  // shuffle wrong
+  for (let i = wrong.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [wrong[i], wrong[j]] = [wrong[j], wrong[i]];
+  }
+  const selected = [correct, ...wrong.slice(0, 3)];
+  // shuffle selected
+  for (let i = selected.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [selected[i], selected[j]] = [selected[j], selected[i]];
+  }
+  return selected;
+}
+
+// ══════════════════════════════════════════
+//  상태 관리
+// ══════════════════════════════════════════
+
+let currentUser = null;
+let usersData = {};
+let currentStage = 1;
+let questions = [];
+let currentQ = 0;
+let score = 0;
+let resultLog = [];
+let answered = false;
+
+function loadData() {
+  try {
+    const raw = localStorage.getItem('court_quiz_users');
+    usersData = raw ? JSON.parse(raw) : {};
+  } catch { usersData = {}; }
+}
+
+function saveData() {
+  try { localStorage.setItem('court_quiz_users', JSON.stringify(usersData)); } catch {}
+}
+
+function getUser(name) {
+  if (!usersData[name]) {
+    usersData[name] = { total: 0, correct: 0, best1: null, best2: null };
+  }
+  return usersData[name];
+}
+
+// ══════════════════════════════════════════
+//  화면 전환
+// ══════════════════════════════════════════
+
+function showScreen(id) {
+  ['screen-login','screen-menu','screen-quiz','screen-result','screen-study'].forEach(s => {
+    const el = document.getElementById(s);
+    el.classList.add('hidden');
+    el.classList.remove('fade-in');
+  });
+  const target = document.getElementById(id);
+  target.classList.remove('hidden');
+  setTimeout(() => target.classList.add('fade-in'), 10);
+}
+
+function login() {
+  const name = document.getElementById('name-input').value.trim();
+  if (!name) { alert('이름을 입력해 주세요.'); return; }
+  currentUser = name;
+  loadData();
+  updateMenuStats();
+  showScreen('screen-menu');
+}
+
+function logout() {
+  currentUser = null;
+  document.getElementById('name-input').value = '';
+  showScreen('screen-login');
+}
+
+function updateMenuStats() {
+  const u = getUser(currentUser);
+  document.getElementById('profile-name-display').textContent = currentUser + ' 님';
+  document.getElementById('stat-total').textContent = u.total;
+  document.getElementById('stat-correct').textContent = u.correct;
+  document.getElementById('stat-rate').textContent = u.total ? Math.round(u.correct/u.total*100)+'%' : '0%';
+  document.getElementById('best1').textContent = u.best1 !== null ? u.best1 : '-';
+  document.getElementById('best2').textContent = u.best2 !== null ? u.best2 : '-';
+}
+
+function goMenu() {
+  updateMenuStats();
+  showScreen('screen-menu');
+}
+
+// ══════════════════════════════════════════
+//  퀴즈 진행
+// ══════════════════════════════════════════
+
+function startStage(stage) {
+  currentStage = stage;
+  currentQ = 0;
+  score = 0;
+  resultLog = [];
+  questions = stage === 1 ? generateStage1Questions(10) : generateStage2Questions(10);
+  document.getElementById('stage-badge').textContent = stage + '단계';
+  showScreen('screen-quiz');
+  renderQuestion();
+}
+
+function retryStage() { startStage(currentStage); }
+
+function renderQuestion() {
+  answered = false;
+  const q = questions[currentQ];
+  const total = questions.length;
+
+  // 진행바
+  document.getElementById('progress-fill').style.width = (currentQ / total * 100) + '%';
+  document.getElementById('progress-text').textContent = currentQ + ' / ' + total;
+
+  // 피드백·다음 버튼 초기화
+  const fb = document.getElementById('feedback-box');
+  fb.className = 'feedback-box';
+  const btnNext = document.getElementById('btn-next');
+  btnNext.className = 'btn-next';
+  btnNext.textContent = currentQ + 1 < total ? '다음 문제 →' : '결과 보기';
+
+  if (currentStage === 1) {
+    document.getElementById('q-stage1-content').classList.remove('hidden');
+    document.getElementById('q-stage2-content').classList.add('hidden');
+    document.getElementById('q-label').textContent = q.label;
+    document.getElementById('q-main').textContent = q.display;
+    document.getElementById('q-hint').textContent = '';
+  } else {
+    document.getElementById('q-stage1-content').classList.add('hidden');
+    document.getElementById('q-stage2-content').classList.remove('hidden');
+    document.getElementById('q-label').textContent = '제증명 신청서';
+    document.getElementById('cert-render').innerHTML = renderCertForm(q);
+  }
+
+  // 선택지
+  const choices = makeChoices(q.answer, DEPARTMENTS_7);
+  const grid = document.getElementById('choices-grid');
+  grid.innerHTML = '';
+  choices.forEach(dept => {
+    const btn = document.createElement('button');
+    btn.className = 'choice-btn';
+    btn.textContent = dept;
+    btn.onclick = () => selectAnswer(dept, q.answer, q.reason || getStage1Reason(q));
+    grid.appendChild(btn);
+  });
+}
+
+function getStage1Reason(q) {
+  if (q.type === 'case') return `'${q.display}' 사건번호는 ${q.answer} 소관입니다.`;
+  return `'${q.display}'는 ${q.answer}에서 담당합니다.`;
+}
+
+function selectAnswer(selected, correct, reason) {
+  if (answered) return;
+  answered = true;
+  const isCorrect = selected === correct;
+
+  // 버튼 상태
+  document.querySelectorAll('.choice-btn').forEach(btn => {
+    btn.disabled = true;
+    if (btn.textContent === correct) btn.classList.add('correct');
+    else if (btn.textContent === selected && !isCorrect) btn.classList.add('wrong');
+  });
+
+  // 피드백
+  const fb = document.getElementById('feedback-box');
+  const fbTitle = document.getElementById('feedback-title');
+  const fbDesc = document.getElementById('feedback-desc');
+  if (isCorrect) {
+    score++;
+    fb.className = 'feedback-box correct show';
+    fbTitle.textContent = '✓ 정답입니다!';
+    fbDesc.textContent = reason;
+  } else {
+    fb.className = 'feedback-box wrong show';
+    fbTitle.textContent = `✗ 오답 — 정답: ${correct}`;
+    fbDesc.textContent = reason;
+  }
+
+  resultLog.push({
+    q: questions[currentQ],
+    selected,
+    correct,
+    isCorrect
+  });
+
+  document.getElementById('btn-next').classList.add('show');
+}
+
+function nextQuestion() {
+  currentQ++;
+  if (currentQ >= questions.length) {
+    showResult();
+  } else {
+    renderQuestion();
+  }
+}
+
+// ══════════════════════════════════════════
+//  결과
+// ══════════════════════════════════════════
+
+function showResult() {
+  // 저장
+  const u = getUser(currentUser);
+  u.total += questions.length;
+  u.correct += score;
+  const bestKey = 'best' + currentStage;
+  if (u[bestKey] === null || score > u[bestKey]) u[bestKey] = score;
+  saveData();
+
+  // 등급
+  const grades = [
+    { min:10, text:'완벽합니다! 🏆', sub:'모든 문제를 맞혔습니다.' },
+    { min:8,  text:'우수합니다! ⭐', sub:'거의 다 맞혔습니다.' },
+    { min:6,  text:'양호합니다.', sub:'조금 더 복습이 필요합니다.' },
+    { min:0,  text:'분류 법칙을 다시 확인하세요.', sub:'차근차근 다시 공부해 봅시다.' }
+  ];
+  const grade = grades.find(g => score >= g.min);
+
+  document.getElementById('result-score').textContent = score;
+  document.getElementById('result-grade').textContent = grade.text;
+  document.getElementById('result-sub').textContent = grade.sub;
+
+  const list = document.getElementById('result-list');
+  list.innerHTML = '';
+  resultLog.forEach((r, i) => {
+    const item = document.createElement('li');
+    item.className = 'result-item';
+    let qText = '';
+    if (currentStage === 1) {
+      qText = r.q.display;
+    } else {
+      qText = `${r.q.year}년 ${r.q.caseCode} / ${r.q.certName.replace('\n','')}`;
+    }
+    item.innerHTML = `
+      <span class="result-icon">${r.isCorrect ? '✅' : '❌'}</span>
+      <div>
+        <div class="result-item-q">${i+1}. ${qText}</div>
+        <div class="${r.isCorrect ? 'result-item-a' : 'result-item-wrong'}">
+          ${r.isCorrect ? r.correct : `오답: ${r.selected} → 정답: ${r.correct}`}
+        </div>
+      </div>`;
+    list.appendChild(item);
+  });
+
+  showScreen('screen-result');
+  updateMenuStats();
+}
+
+// ══════════════════════════════════════════
+//  초기화
+// ══════════════════════════════════════════
+
+loadData();
+document.getElementById('name-input').addEventListener('keydown', e => {
+  if (e.key === 'Enter') login();
+});
+
+// ── 학습 탭 전환 ──
+function switchTab(tabId) {
+  document.querySelectorAll('.study-section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.study-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById(tabId).classList.add('active');
+  event.currentTarget.classList.add('active');
+}
+</script>
+</body>
+</html>
