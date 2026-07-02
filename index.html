@@ -1580,15 +1580,26 @@ const DOC_FORMS = [
     reason: '의사표시의 공시송달 신청은 민사신청과에서 담당합니다.'
   },
   {
-    title: '송달·확정증명원',
+    title: '송달증명원',
     answer: '종합민원실',
     fields: [
       ['원고', '김중앙'],
       ['피고', '박지법'],
     ],
-    para: '위 사건에 관하여 귀원에서 선고한 판결이 피고에게 <strong>적법하게 송달</strong>되고 <strong>확정</strong>되었음을 증명하여 주시기 바랍니다.',
+    para: '위 사건에 관하여 귀원에서 선고한 판결이 피고에게 <strong>적법하게 송달</strong>되었음을 증명하여 주시기 바랍니다.',
     signWho: '신청인', signName: '김중앙',
-    reason: '송달·확정증명원 발급은 종합민원실에서 담당합니다.'
+    reason: '송달증명원 발급은 종합민원실에서 담당합니다.'
+  },
+  {
+    title: '확정증명원',
+    answer: '종합민원실',
+    fields: [
+      ['원고', '김중앙'],
+      ['피고', '박지법'],
+    ],
+    para: '위 사건에 관하여 귀원에서 선고한 판결이 <strong>확정</strong>되었음을 증명하여 주시기 바랍니다.',
+    signWho: '신청인', signName: '김중앙',
+    reason: '확정증명원 발급은 종합민원실에서 담당합니다.'
   },
   {
     title: '승계집행문 송달증명원',
@@ -1600,6 +1611,26 @@ const DOC_FORMS = [
     para: '위 사건에 관하여 부여된 <strong>승계집행문</strong> 및 승계사실 증명서 등본이 채무자 <strong>박지법</strong>에게 <strong>적법하게 송달</strong>되었음을 증명하여 주시기 바랍니다.',
     signWho: '신청인', signName: '김중앙',
     reason: '승계송달증명 발급은 종합민원실에서 담당합니다.'
+  },
+  {
+    title: '지급명령신청',
+    answer: '종합민원실',
+    noCase: true,
+    noPara: true,
+    fields: [
+      ['채권자', '김중앙'],
+      ['채무자', '박지법'],
+      ['청구금액', '금 15,000,000원'],
+    ],
+    signWho: '채권자', signName: '김중앙',
+    reason: '지급명령신청(독촉사건)은 금액과 무관하게 종합민원실에서 담당합니다.'
+  },
+  {
+    title: '소장',
+    dynamic: 'soga',   // 소가에 따라 정답·내용 동적 생성
+    noCase: true,
+    noPara: true,
+    signWho: '원고', signName: '김중앙',
   },
 ];
 
@@ -1613,30 +1644,61 @@ function generateStage3Questions(count = 10) {
   while (pool.length < count) {
     for (const d of shuffled) {
       if (pool.length >= count) break;
-      pool.push(d);
+      pool.push(buildStage3Question(d));
     }
   }
   return pool.slice(0, count);
 }
 
+// 동적 문서(소장 등)를 실제 출제 문항으로 변환
+function buildStage3Question(d) {
+  if (d.dynamic === 'soga') {
+    // 소가 랜덤 생성: 100만~1억 사이, 만원 단위
+    const man = randInt(100, 10000); // 만원 단위
+    const won = man * 10000;
+    const isSmall = won < 30000000; // 3천만원 미만 → 민사소액과
+    const ans = isSmall ? '민사소액과' : '종합민원실';
+    const sogaStr = '금 ' + won.toLocaleString() + '원';
+    return {
+      title: '소장',
+      noCase: true,
+      noPara: true,
+      fields: [
+        ['원고', '김중앙'],
+        ['피고', '박지법'],
+        ['소가', sogaStr],
+      ],
+      signWho: '원고', signName: '김중앙',
+      answer: ans,
+      reason: isSmall
+        ? `소가 ${sogaStr}은 3,000만원 미만이므로 소액사건, 민사소액과에서 담당합니다.`
+        : `소가 ${sogaStr}은 3,000만원 이상이므로 종합민원실에서 담당합니다.`
+    };
+  }
+  return d;
+}
+
 function renderDocForm(q) {
   let fieldsHtml = '';
-  // 사건란 (사건번호 보류 → 빈칸)
-  fieldsHtml += `<div class="doc-field">
-    <div class="doc-field-label">사건</div>
-    <div class="doc-field-value">&nbsp;</div>
-  </div>`;
+  // 사건란 (noCase가 아니면 표시, 사건번호 보류 → 빈칸)
+  if (!q.noCase) {
+    fieldsHtml += `<div class="doc-field">
+      <div class="doc-field-label">사건</div>
+      <div class="doc-field-value">&nbsp;</div>
+    </div>`;
+  }
   for (const f of q.fields) {
     fieldsHtml += `<div class="doc-field">
       <div class="doc-field-label">${f[0]}</div>
       <div class="doc-field-value">${f[1]}</div>
     </div>`;
   }
+  const paraHtml = q.noPara ? '<div style="flex:1"></div>' : `<div class="doc-para">${q.para}</div>`;
   return `
   <div class="doc-form">
     <div class="doc-title">${q.title}</div>
     ${fieldsHtml}
-    <div class="doc-para">${q.para}</div>
+    ${paraHtml}
     <div class="doc-sign-date">20 . . .</div>
     <div class="doc-sign-name"><span class="who">${q.signWho}</span>${q.signName}&nbsp;&nbsp;<small>(인)</small></div>
     <div class="doc-court">○ ○ 법 원 &nbsp; 귀중</div>
