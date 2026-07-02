@@ -709,6 +709,7 @@
       <button class="study-tab" onclick="switchTab('tab-court')">🏛 재판부·계</button>
       <button class="study-tab" onclick="switchTab('tab-cert')">📄 제증명</button>
       <button class="study-tab" onclick="switchTab('tab-system')">ℹ️ 사건번호</button>
+      <button class="study-tab" onclick="switchTab('tab-docs')">📝 신청서 분류</button>
     </div>
 
     <!-- 탭1: 사건번호 -->
@@ -1070,6 +1071,110 @@
       </div>
 
     </div><!-- /tab-system -->
+
+    <!-- 탭5: 3단계 해답 -->
+    <div class="study-section" id="tab-docs">
+
+      <div class="study-tip" style="margin-bottom:16px;">
+        📝 3단계에 출제되는 각 <strong>신청서·문서</strong>가 어느 부서로 분류되는지 정리한 해답입니다. 문서의 종류(제목)와 핵심 내용으로 담당 부서를 판단합니다.
+      </div>
+
+      <div class="study-card">
+        <div class="study-card-header"><span class="dept-name">기록관리과</span><span class="dept-badge">집행문 부여</span></div>
+        <div class="study-card-body">
+          <div class="rule-item">
+            <div class="rule-body">
+              <div class="rule-cond"><strong>승계집행문 부여신청</strong></div>
+              <div class="rule-note">당사자 사망·채권양도 등으로 지위를 승계받아 집행문을 부여받는 신청</div>
+            </div>
+          </div>
+          <div class="rule-item">
+            <div class="rule-body">
+              <div class="rule-cond"><strong>집행문 재도부여신청</strong></div>
+              <div class="rule-note">기존 집행문 분실 등으로 다시 1통을 부여받는 신청</div>
+            </div>
+          </div>
+          <div class="rule-item">
+            <div class="rule-body">
+              <div class="rule-cond"><strong>집행문 수통부여신청</strong></div>
+              <div class="rule-note">재산이 여러 곳에 있어 같은 집행문을 여러 통 부여받는 신청</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="study-card">
+        <div class="study-card-header"><span class="dept-name">민사집행과</span><span class="dept-badge">강제집행</span></div>
+        <div class="study-card-body">
+          <div class="rule-item">
+            <div class="rule-body">
+              <div class="rule-cond"><strong>채권압류 및 추심명령 신청</strong></div>
+              <div class="rule-note">채무자가 제3채무자에 대해 가진 채권(예금 등)을 압류·추심 (타채)</div>
+            </div>
+          </div>
+          <div class="rule-item">
+            <div class="rule-body">
+              <div class="rule-cond"><strong>재산명시 신청</strong></div>
+              <div class="rule-note">채무자에게 재산목록 제출을 명하도록 하는 신청 (카명)</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="study-card">
+        <div class="study-card-header"><span class="dept-name">민사신청과</span><span class="dept-badge">기타 신청</span></div>
+        <div class="study-card-body">
+          <div class="rule-item">
+            <div class="rule-body">
+              <div class="rule-cond"><strong>의사표시의 공시송달 신청</strong></div>
+              <div class="rule-note">상대방 소재불명 시 의사표시를 공시송달로 하는 신청 (카기)</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="study-card">
+        <div class="study-card-header"><span class="dept-name">종합민원실</span><span class="dept-badge">증명·독촉</span></div>
+        <div class="study-card-body">
+          <div class="rule-item">
+            <div class="rule-body">
+              <div class="rule-cond"><strong>송달증명원</strong></div>
+              <div class="rule-note">판결이 상대방에게 적법하게 송달되었음을 증명</div>
+            </div>
+          </div>
+          <div class="rule-item">
+            <div class="rule-body">
+              <div class="rule-cond"><strong>확정증명원</strong></div>
+              <div class="rule-note">판결이 확정되었음을 증명</div>
+            </div>
+          </div>
+          <div class="rule-item">
+            <div class="rule-body">
+              <div class="rule-cond"><strong>승계집행문 송달증명원</strong></div>
+              <div class="rule-note">승계집행문 및 증명서가 채무자에게 송달되었음을 증명 (승계송달증명)</div>
+            </div>
+          </div>
+          <div class="rule-item">
+            <div class="rule-body">
+              <div class="rule-cond"><strong>지급명령신청</strong></div>
+              <div class="rule-note">독촉사건. 청구금액과 무관하게 항상 종합민원실</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="study-card">
+        <div class="study-card-header"><span class="dept-name">소장 — 소가에 따라 분리</span><span class="dept-badge">금액 판단</span></div>
+        <div class="study-card-body">
+          <p style="font-size:13px;color:var(--text2);line-height:1.7;margin-bottom:10px;">
+            <strong>소장</strong>은 원고·피고·소가만 제시됩니다. <strong>소가(訴價)</strong> 금액을 보고 부서를 판단합니다.
+          </p>
+          <div class="range-row"><span class="range-label">3,000만원 미만</span><span class="range-value" style="color:var(--correct);font-weight:700;">민사소액과</span><span class="range-exclude">소액사건</span></div>
+          <div class="range-row"><span class="range-label">3,000만원 이상</span><span class="range-value" style="color:var(--accent);font-weight:700;">종합민원실</span><span class="range-exclude">일반 민사</span></div>
+        </div>
+      </div>
+
+    </div><!-- /tab-docs -->
 
   </div><!-- /screen-study -->
 
