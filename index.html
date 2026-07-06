@@ -905,7 +905,7 @@
           <div class="rule-item">
             <div class="rule-num">1</div>
             <div class="rule-body">
-              <div class="rule-cond"><strong>사건번호가 형사 사건</strong>인 경우<br><span style="font-size:11px;color:var(--text3);">고·노·도 계열 및 예외(초기, 형제) 포함</span></div>
+              <div class="rule-cond"><strong>사건번호가 형사 사건</strong>인 경우<br><span style="font-size:11px;color:var(--text3);">고·노·도 계열 및 예외(초기) 포함</span></div>
               <span class="rule-result">→ 형사접수실</span>
               <div class="rule-note">신청 종류·연도 무관하게 항상 적용되는 최우선 규칙</div>
             </div>
@@ -1017,12 +1017,13 @@
             </thead>
             <tbody>
               <tr><td><strong>합</strong></td><td>합의심 (판사 여럿)</td><td>가합, 고합</td></tr>
-              <tr><td><strong>단</strong></td><td>단독심 (판사 1명)</td><td>가단, 나단</td></tr>
-              <tr><td><strong>소</strong></td><td>소액 사건</td><td>가소, 나소</td></tr>
+              <tr><td><strong>단</strong></td><td>단독심 (판사 1명)</td><td>가단, 고단</td></tr>
+              <tr><td><strong>소</strong></td><td>소액 사건</td><td>가소</td></tr>
               <tr><td><strong>약</strong></td><td>약식 사건</td><td>고약</td></tr>
               <tr><td><strong>정</strong></td><td>정식재판 청구</td><td>고정</td></tr>
               <tr><td><strong>채·경·인</strong></td><td>집행 관련</td><td>타채, 타경, 타인</td></tr>
               <tr><td><strong>합·단·경·담</strong></td><td>신청 관련</td><td>카합, 카담</td></tr>
+              <tr><td><strong>공·임·정·기</strong></td><td>기타 신청</td><td>카공, 카임, 카기</td></tr>
             </tbody>
           </table>
 
@@ -1041,11 +1042,11 @@
               <tr><th>형식</th><th>예시</th><th>의미</th></tr>
             </thead>
             <tbody>
-              <tr><td>민사 n부</td><td>민사 12부</td><td>민사 합의 재판부</td></tr>
-              <tr><td>n 민사 단독</td><td>35 민사 단독</td><td>민사 단독 재판부</td></tr>
-              <tr><td>형사 n부</td><td>형사 7부</td><td>형사 합의 재판부</td></tr>
-              <tr><td>n 형사 단독</td><td>20 형사 단독</td><td>형사 단독 재판부</td></tr>
-              <tr><td>○○ n계</td><td>경매 5계</td><td>해당 부서 담당계</td></tr>
+              <tr><td>민사 n부</td><td>민사 ○부</td><td>민사 합의 재판부</td></tr>
+              <tr><td>n 민사 단독</td><td>○ 민사 단독</td><td>민사 단독 재판부</td></tr>
+              <tr><td>형사 n부</td><td>형사 ○부</td><td>형사 합의 재판부</td></tr>
+              <tr><td>n 형사 단독</td><td>○ 형사 단독</td><td>형사 단독 재판부</td></tr>
+              <tr><td>○○ n계</td><td>경매 ○계</td><td>해당 부서 담당계</td></tr>
             </tbody>
           </table>
         </div>
@@ -1240,33 +1241,36 @@ const DEPARTMENTS_7 = [
   '종합민원실','형사접수실','민사집행과','민사신청과','기록관리과','민사소액과','공탁과'
 ];
 
-// 사건번호 DB
+// 사건번호(부호문자) DB — 실제 존재하는 부호만 명시
 const CASE_DB = {
   종합민원실: {
-    regular: { front: ['가','나','다'], back: ['합','단'] },
+    codes: ['가합','가단','나','다','라'],
     exceptions: ['차전','머'],
     condition: 'exclude_others' // 타 부서 해당 없는 것
   },
   형사접수실: {
-    regular: { front: ['고','노','도'], back: ['합','약','정'] },
-    exceptions: ['초기','형제']
+    codes: ['고합','고단','고약','고정','노','도','로'],
+    exceptions: ['초기']
   },
   민사집행과: {
-    regular: { front: ['타'], back: ['채','경','인'] },
+    codes: ['타채','타경','타인'],
     exceptions: ['카불','카명','카조','정명']
   },
   민사신청과: {
-    regular: { front: ['카'], back: ['합','단','경','담'] },
+    codes: ['카합','카단','카경','카담','카공','카임','카정','카기'],
     exceptions: ['자','과','비단','비합'],
     condition: 'exclude_집행' // 민사집행과 해당 없는 것
   },
   기록관리과: {
+    codes: [],
     exceptions: ['카확']
   },
   민사소액과: {
-    regular: { front: ['가','나','다'], back: ['소'] }
+    codes: ['가소'],
+    exceptions: []
   },
   공탁과: {
+    codes: [],
     exceptions: ['금']
   }
 };
@@ -1328,33 +1332,28 @@ function randYear() {
 }
 
 function isFormType(code) {
-  // 형사 사건번호 판별 (앞 글자 고/노/도 계열 또는 형사 예외)
-  const formalExceptions = ['초기','형제'];
-  if (formalExceptions.includes(code)) return true;
-  const criminal = ['고','노','도'];
-  return criminal.includes(code[0]);
+  // 형사 사건번호 판별 (형사접수실 codes/exceptions에 포함되면 형사)
+  const db = CASE_DB.형사접수실;
+  return db.codes.includes(code) || db.exceptions.includes(code);
 }
 
 function isDeptCode(code, dept) {
   const db = CASE_DB[dept];
   if (!db) return false;
   if (db.exceptions && db.exceptions.includes(code)) return true;
-  if (!db.regular) return false;
-  return db.regular.front.includes(code[0]) && db.regular.back.includes(code.slice(1));
+  if (db.codes && db.codes.includes(code)) return true;
+  return false;
 }
 
 function getDeptFromCaseCode(code) {
-  // 우선순위 판별
+  // 우선순위 판별 (명시된 코드 목록 기준)
   if (isDeptCode(code, '기록관리과')) return '기록관리과';
   if (isDeptCode(code, '공탁과')) return '공탁과';
   if (isDeptCode(code, '형사접수실')) return '형사접수실';
   if (isDeptCode(code, '민사소액과')) return '민사소액과';
   if (isDeptCode(code, '민사집행과')) return '민사집행과';
-  // 민사신청과: 카 계열이지만 집행 아닌 것
-  if (CASE_DB.민사신청과.exceptions.includes(code)) return '민사신청과';
-  if (code[0] === '카' && !isDeptCode(code, '민사집행과')) return '민사신청과';
-  // 종합민원실
-  if (isDeptCode(code, '종합민원실') || CASE_DB.종합민원실.exceptions.includes(code)) return '종합민원실';
+  if (isDeptCode(code, '민사신청과')) return '민사신청과';
+  if (isDeptCode(code, '종합민원실')) return '종합민원실';
   return '종합민원실'; // default fallback
 }
 
@@ -1364,25 +1363,22 @@ function getDeptFromCaseCode(code) {
 
 function generateAllCaseCodes() {
   const pool = [];
-  // 종합민원실 정규
-  for (const f of ['가','나','다']) for (const b of ['합','단']) pool.push({ code: f+b, dept: '종합민원실' });
+  // 종합민원실: 가합·가단(1심), 나(항소), 다(상고), 라(항고)
+  for (const c of ['가합','가단','나','다','라']) pool.push({ code: c, dept: '종합민원실' });
   for (const e of ['차전','머']) pool.push({ code: e, dept: '종합민원실' });
-  // 형사접수실
-  for (const f of ['고','노','도']) for (const b of ['합','약','정']) pool.push({ code: f+b, dept: '형사접수실' });
-  for (const e of ['초기','형제']) pool.push({ code: e, dept: '형사접수실' });
-  // 민사집행과
-  for (const b of ['채','경','인']) pool.push({ code: '타'+b, dept: '민사집행과' });
+  // 형사접수실: 고합·고단·고약·고정(1심), 노(항소), 도(상고), 로(항고)
+  for (const c of ['고합','고단','고약','고정','노','도','로']) pool.push({ code: c, dept: '형사접수실' });
+  for (const e of ['초기']) pool.push({ code: e, dept: '형사접수실' });
+  // 민사집행과: 타채·타경·타인
+  for (const c of ['타채','타경','타인']) pool.push({ code: c, dept: '민사집행과' });
   for (const e of ['카불','카명','카조','정명']) pool.push({ code: e, dept: '민사집행과' });
-  // 민사신청과
-  for (const b of ['합','단','경','담']) {
-    const code = '카'+b;
-    if (!isDeptCode(code, '민사집행과')) pool.push({ code, dept: '민사신청과' });
-  }
+  // 민사신청과: 카합·카단·카경·카담·카공·카임·카정·카기
+  for (const c of ['카합','카단','카경','카담','카공','카임','카정','카기']) pool.push({ code: c, dept: '민사신청과' });
   for (const e of ['자','과','비단','비합']) pool.push({ code: e, dept: '민사신청과' });
   // 기록관리과
   pool.push({ code: '카확', dept: '기록관리과' });
-  // 민사소액과
-  for (const f of ['가','나','다']) pool.push({ code: f+'소', dept: '민사소액과' });
+  // 민사소액과: 가소
+  pool.push({ code: '가소', dept: '민사소액과' });
   // 공탁과
   pool.push({ code: '금', dept: '공탁과' });
   return pool;
@@ -1487,9 +1483,7 @@ const CERT_TYPES = [
 ];
 
 function isCriminalCode(code) {
-  const crimExceptions = ['초기','형제'];
-  if (crimExceptions.includes(code)) return true;
-  return ['고','노','도'].includes(code[0]);
+  return isFormType(code);
 }
 
 function getDeptFromCert(caseCode, certNum, year) {
