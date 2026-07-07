@@ -247,9 +247,24 @@
     font-family: 'Noto Sans KR', sans-serif;
     cursor: pointer; display: none;
     transition: background 0.2s;
+    position: relative; overflow: hidden;
   }
   .btn-next.show { display: block; }
   .btn-next:hover { background: #a87a2a; }
+  /* 자동진행 타이머 바 (버튼 내부를 채우는 오버레이) */
+  .btn-next .timer-fill {
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 100%;
+    background: rgba(255,255,255,0.28);
+    transform-origin: left center;
+    pointer-events: none;
+  }
+  .btn-next .btn-next-label {
+    position: relative;
+    z-index: 1;
+  }
+  @keyframes timerShrink { from { transform: scaleX(1); } to { transform: scaleX(0); } }
 
   /* 2단계 제증명 */
   .certificate-form {
@@ -1211,7 +1226,7 @@
         <div class="feedback-title" id="feedback-title"></div>
         <div id="feedback-desc"></div>
       </div>
-      <button class="btn-next" id="btn-next" onclick="nextQuestion()">다음 문제 →</button>
+      <button class="btn-next" id="btn-next" onclick="nextQuestion()"><span class="timer-fill" id="timer-fill"></span><span class="btn-next-label" id="btn-next-label">다음 문제 →</span></button>
     </div>
   </div>
 
@@ -1897,6 +1912,7 @@ function updateMenuStats() {
 }
 
 function goMenu() {
+  clearAutoAdvance();
   updateMenuStats();
   showScreen('screen-menu');
 }
@@ -1934,7 +1950,9 @@ function renderQuestion() {
   fb.className = 'feedback-box';
   const btnNext = document.getElementById('btn-next');
   btnNext.className = 'btn-next';
-  btnNext.textContent = currentQ + 1 < total ? '다음 문제 →' : '결과 보기';
+  document.getElementById('btn-next-label').textContent = currentQ + 1 < total ? '다음 문제 →' : '결과 보기';
+  // 자동진행 타이머 초기화
+  clearAutoAdvance();
 
   if (currentStage === 1) {
     document.getElementById('q-stage1-content').classList.remove('hidden');
@@ -2010,9 +2028,32 @@ function selectAnswer(selected, correct, reason) {
   });
 
   document.getElementById('btn-next').classList.add('show');
+
+  // 자동진행: 정답 2초, 오답 4초
+  startAutoAdvance(isCorrect ? 2000 : 4000);
+}
+
+// ── 자동진행 타이머 ──
+let autoAdvanceTimer = null;
+
+function startAutoAdvance(ms) {
+  const fill = document.getElementById('timer-fill');
+  // 애니메이션 재시작 (reflow 트릭)
+  fill.style.animation = 'none';
+  fill.style.transform = 'scaleX(1)';
+  void fill.offsetWidth;
+  fill.style.animation = `timerShrink ${ms}ms linear forwards`;
+  autoAdvanceTimer = setTimeout(() => { nextQuestion(); }, ms);
+}
+
+function clearAutoAdvance() {
+  if (autoAdvanceTimer) { clearTimeout(autoAdvanceTimer); autoAdvanceTimer = null; }
+  const fill = document.getElementById('timer-fill');
+  if (fill) { fill.style.animation = 'none'; fill.style.transform = 'scaleX(1)'; }
 }
 
 function nextQuestion() {
+  clearAutoAdvance();
   currentQ++;
   if (currentQ >= questions.length) {
     showResult();
